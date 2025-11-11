@@ -1,0 +1,63 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = 'com.example'
+version = '1.0-SNAPSHOT'
+
+// Java バージョン指定
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+// メインクラスの指定
+application {
+    mainClass = 'com.example.app.Main'
+}
+
+// リポジトリ設定（外部ライブラリをダウンロードする場所）
+repositories {
+    mavenCentral()
+}
+
+// 依存関係の定義
+dependencies {
+    // テスト用ライブラリ
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.3'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+// テスト設定
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+// ホットリロード用タスク（継続的ビルド）
+task watch(type: JavaExec) {
+    group = 'application'
+    description = 'Run the application with auto-reload'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = application.mainClass
+    
+    // 標準入力を有効化
+    standardInput = System.in
+}
+
+// デバッグ情報を表示するタスク
+task showDependencies {
+    group = 'help'
+    description = 'Show project dependencies tree'
+    doLast {
+        println "=== Dependencies ==="
+        configurations.runtimeClasspath.each { println it.name }
+    }
+}
+
+// クリーンビルド
+task cleanBuild {
+    group = 'build'
+    description = 'Clean and build the project'
+    dependsOn clean, build
+}
