@@ -4,7 +4,8 @@
 
 ## 環境構成
 
-- **Java**: OpenJDK 17
+- **Java**: Eclipse Temurin 21 (LTS)
+- **Gradle**: 8.11.1
 - **エディタ**: vim, nano (コンテナ内で使用可能)
 - **Git**: インストール済み
 
@@ -27,9 +28,14 @@ docker-compose exec java bash
 コンテナ内で以下のコマンドを実行:
 
 ```bash
-# 実行
-# 任意のディレクトリへ移動後
-java Main
+# Gradleでビルド
+./gradlew build
+
+# Gradleで実行
+./gradlew run
+
+# または直接Javaで実行
+java -cp build/classes/java/main com.example.app.Main
 ```
 
 ### 4. コンテナの停止
@@ -44,10 +50,52 @@ docker-compose down
 - ホスト側でファイルを編集すると、コンテナ内にも反映されます
 - コンテナを停止しても、ファイルは保持されます
 
-## Java バージョンの確認
+## バージョンの確認
 
 コンテナ内で以下のコマンドを実行:
 
 ```bash
+# Javaバージョン確認
 java -version
+
+# Gradleバージョン確認
+./gradlew --version
+```
+
+## Gradle コマンド
+
+```bash
+# ビルド
+./gradlew build
+
+# クリーンビルド
+./gradlew clean build
+
+# 実行
+./gradlew run
+
+# テスト
+./gradlew test
+
+# タスク一覧
+./gradlew tasks
+```
+
+## プロジェクト構造
+
+```
+java_docker_fcc/
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/example/app/
+│   │   │       └── Main.java
+│   │   └── resources/
+│   └── test/
+│       └── java/
+├── build.gradle          # ビルド設定
+├── settings.gradle       # プロジェクト設定
+├── gradlew              # Gradle Wrapper (Unix/Mac)
+└── gradle/
+    └── wrapper/         # Gradle Wrapper設定
 ```
